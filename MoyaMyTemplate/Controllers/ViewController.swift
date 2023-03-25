@@ -9,18 +9,27 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private let networkManager = NetworkManager()
+    private let viewModel = ViewModel()
     
-    var movieDetail: MovieDetailResponse?
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadMovieDetail(movieId: "550")
-        print(movieDetail?.homepage)
+
+        viewModel.loadMovieDetail(movieId: "550") { result in
+            print(result.homepage)
+        }
+    }    
+}
+
+class ViewModel {
+    var networkManager: NetworkManager
+    
+    var movieDetail: MovieDetailResponse?
+    
+    init(networkManager: NetworkManager = NetworkManager()) {
+        self.networkManager = networkManager
     }
     
-    func loadMovieDetail(movieId: String) {
+    func loadMovieDetail(movieId: String, completion: @escaping (MovieDetailResponse) -> ()) {
         networkManager.fetcMovieDetail(movieId: movieId) { [weak self] result in
             guard let self = self else { return }
             
@@ -28,13 +37,12 @@ class ViewController: UIViewController {
             
             case .success(let movieDetailResponse):
                 self.movieDetail = movieDetailResponse
-                print(self.movieDetail?.homepage)
+                completion(movieDetailResponse)
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
-
-
 }
+
 

@@ -15,7 +15,8 @@ enum API {
 }
 
 extension API: TargetType {
-    var baseUr: URL {
+    
+    var baseURL: URL {
         guard let url = URL(string: "https://api.themoviedb.org/3/") else { fatalError() }
         return url
     }
@@ -31,7 +32,7 @@ extension API: TargetType {
         }
     }
     
-    var method: Method {
+    var method: Moya.Method {
         return .get
     }
     
@@ -42,10 +43,10 @@ extension API: TargetType {
     var task: Task {
         switch self {
         case .popular, .movie:
-            return .requestParameters(parameters: ["api_key": Constants.API.apiKey],
+            return .requestParameters(parameters: ["api_key": ApiKey.apiKey],
                                       encoding: URLEncoding.queryString)
         case .search(let query):
-            return .requestParameters(parameters: ["query": query, "api_key": Constants.API.apiKey],
+            return .requestParameters(parameters: ["query": query, "api_key": ApiKey.apiKey],
                                       encoding: URLEncoding.queryString)
         }
     }
