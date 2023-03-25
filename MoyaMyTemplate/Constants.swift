@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Constants {
-    struct API {
-        static let apiKey = "dc06ab250571918a1dc2bcff66cd1e5e"
+enum Constants {
+    enum API {
+        static let apiKey = ""
+        
     }
 }
